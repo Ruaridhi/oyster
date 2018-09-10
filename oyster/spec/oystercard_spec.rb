@@ -12,9 +12,9 @@ describe Oystercard do
     expect(subject.balance).to eq 10
   end
 
-  it "raises error when balance + top up amounts to more then 90" do
-    allow(subject).to receive(:balance) {70}
-    expect{subject.top_up(21)}.to raise_error ('Unable to top up,maxmium reached')
+  it "raises error when balance + top up amounts to a set limit" do
+    allow(subject).to receive(:balance) {Oystercard::MAXIMUM}
+    expect{subject.top_up(1)}.to raise_error ('Unable to top up,maximum #{Oystercard::MAXIMUM} reached')
   end
 
 end
