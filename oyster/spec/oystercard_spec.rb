@@ -1,17 +1,20 @@
 require 'oystercard'
 
 describe Oystercard do
-  it 'should have a balance method' do
-    expect(subject).to respond_to(:balance)
-  end
 
   it "the balance should be 0 by default" do
     expect(subject.balance).to eq 0
   end
 
-  it "should have a top up method" do
-    expect(subject).to respond_to(:top_up).with(1).argument
+
+  it "when we top up £10, add to balance" do
+    subject.top_up(10)
+    expect(subject.balance).to eq 10
   end
 
+  it "raises error when balance + top up amounts to more then 90" do
+    allow(subject).to receive(:balance) {70}
+    expect{subject.top_up(21)}.to raise_error ('Unable to top up,maxmium reached')
+  end
 
 end
