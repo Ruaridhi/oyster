@@ -17,4 +17,9 @@ describe Oystercard do
     expect{subject.top_up(1)}.to raise_error ('Unable to top up,maximum #{Oystercard::MAXIMUM} reached')
   end
 
+  it { is_expected.to respond_to(:deduct).with(1).argument }
+
+  it "should deduct money from balance when used" do
+    expect {subject.deduct(1)}.to change{subject.balance}.by(-1)
+  end
 end

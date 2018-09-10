@@ -10,8 +10,12 @@ oystercard.balance == 0
 as a customer
 I want to add money to my card -->
 oystercard.top_up(10)
-balance == 10 <!-- true! -->
+oystercard.balance == 10 <!-- true! -->
 
 <!-- In order to protect my money from theft or loss
 As a customer
 I want a maximum limit of 90 on my card -->
+ oystercard.top_up(81)
+ <!--raise_error-->
+oystercard.deduct(1)
+oystercard.balance == 9
