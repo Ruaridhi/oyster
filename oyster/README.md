@@ -19,3 +19,17 @@ I want a maximum limit of 90 on my card -->
  <!--raise_error-->
 oystercard.deduct(1)
 oystercard.balance == 9
+
+<!-- In order to get through the barriers.
+As a customer
+I need to touch in and out. -->
+oystercard.touch_in
+<!-- returns true -->
+oystercard.in_journey?
+<!-- returns true -->
+oystercard.touch_out
+<!-- returns false -->
+
+<!-- In order to pay for my journey
+As a customer
+I need to have the minimum amount (£1) for a single journey. -->

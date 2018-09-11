@@ -22,30 +22,28 @@ describe Oystercard do
     expect {subject.deduct(1)}.to change{subject.balance}.by(-1)
   end
 
-describe "#touch_in" do
-  it "should have a touch in method" do
-    expect(subject).to respond_to(:touch_in)
-  end
+  it { is_expected.to respond_to(:touch_in)}
+  it {is_expected.to respond_to(:touch_out)}
+  it {is_expected.to respond_to(:in_journey?)}
 
-  it 'oystercard is in use' do
-    expect{subject.touch_in}.to change{subject.in_journey?}.to true
+describe "#touch_in" do
+  it "touches in oystercard" do
+    expect(subject.touch_in).to eq(true)
   end
 end
 
-describe "in_journey"
-  it "it should have a in journey method" do
-    expect(subject).to respond_to(:in_journey?)
-  end
-
-  it "it is not in use" do
-    expect(subject.in_journey?).to eq(false)
-    # expect(subject).not_to be_in_journey
-  end
-
-
-
-  it 'not in use after touch out'do
+describe "#touch_out" do
+  it "touches out oystercard" do
     subject.touch_in
-    expect{subject.touch_out}.to change{subject.in_journey?}.to false
+    expect(subject.touch_out).to eq(false)
   end
+end
+
+describe "#in_journey?" do
+  it "it returns true when touched in" do
+  subject.touch_in
+  expect(subject.in_journey?).to eq(true)
+  end
+end
+
 end
