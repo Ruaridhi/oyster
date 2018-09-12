@@ -2,12 +2,16 @@ require 'oystercard'
 
 describe Oystercard do
   let(:station) {double("station_new")}
+  let(:exit_station){double("Station")}
   it "the balance should be 0 by default" do
     expect(subject.balance).to eq 0
   end
 
-  it "responds to station" do
-    expect(subject).to respond_to(:station)
+  it {expect(subject).to respond_to(:journeys)}
+
+
+  it "checks journeys is empty by default" do
+    expect(subject.journeys).to be_empty
   end
 
   it "when we top up £10, add to balance" do
@@ -22,7 +26,9 @@ describe Oystercard do
 
   #
   it "should deduct money from balance when used" do
-    expect {subject.touch_out}.to change{subject.balance}.by(-1)
+    subject.top_up(10)
+    subject.touch_in(:station)
+    expect {subject.touch_out(:exit_station)}.to change{subject.balance}.by(-described_class::MIN_FAIR)
   end
 
 
@@ -33,10 +39,10 @@ describe Oystercard do
       expect{subject.touch_in(:station)}.to raise_error('Insufficient funds')
     end
 
-    it "set station to where touched in" do
+    it "pushes a hash of the entry stations to journeys array" do
       subject.top_up(10)
       subject.touch_in(:station)
-      expect(subject.station).to eq(:station)
+      expect(subject.journeys).to eq([{entry_station: :station}])
     end
 
   end
@@ -45,20 +51,30 @@ describe Oystercard do
     it "touches out oystercard" do
       subject.top_up(10)
       subject.touch_in(:station)
-      subject.touch_out
+      subject.touch_out(:exit_station)
       expect(subject.in_journey?).to eq(false)
     end
 
     it "deducts minimum fair from balance when touched out" do
-      expect{subject.touch_out}.to change{subject.balance}.by (-described_class::MIN_FAIR)
-    end
-
-    it "clears station entry when touching out" do
       subject.top_up(10)
       subject.touch_in(:station)
-      subject.touch_out
-      expect(subject.station).to eq(nil)
+      expect{subject.touch_out(:exit_station)}.to change{subject.balance}.by (-described_class::MIN_FAIR)
+    end
 
+
+    # it "stores the exit_station" do
+    #   subject.top_up(10)
+    #   subject.touch_in(:station)
+    #   subject.touch_out(:exit_station)
+    #   expect(subject.exit_station).to eq(:exit_station)
+    # end
+
+    it "adding exit_station key value pair to journeys" do
+      subject.top_up(10)
+      subject.touch_in(:station)
+      subject.touch_out(:exit_station)
+      expect(subject.journeys).to eq([{entry_station: :station,
+        exit_station: :exit_station}])
     end
 
   end
