@@ -55,3 +55,20 @@ oystercard.touch_in
 MIN_FAIR = 1
 oystercard.touch_out
 oystercard.balance = new balance
+
+<!-- In order to pay for my journey
+As a customer
+I need to know where I've travelled from -->
+load './lib/oystercard.rb'
+oystercard = Oystercard.new
+oystercard.top_up(10)
+oystercard.touch_in
+oystercard.station
+
+<!-- In order to be charged correctly
+As a customer
+I need a penalty charge deducted if I fail to touch in or out -->
+load './lib/oystercard.rb'
+oystercard = Oystercard.new
+oystercard.top_up(10)
+oystercard.touch_in('Kings Cross')
